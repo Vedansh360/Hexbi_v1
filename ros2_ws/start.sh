@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Start WebSocket server in background
-echo "Starting WebSocket server..."
-python3 websocket_server.py &
+echo "Starting Motor Control server..."
+python3 ws_server_motor.py &
 
 echo "Starting Camera server..."
-python3 websocket_client_camera.py &
+python3 ws_server_camera.py &
 
 # Start ROS 2 node: keyboard_input in background
 echo "Starting keyboard_input node..."

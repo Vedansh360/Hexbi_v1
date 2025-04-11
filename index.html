@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Robot Control & Live Stream</title>
+        <style>
+            body {
+                background-color: #121212;
+                color: white;
+                font-family: Arial, sans-serif;
+                padding: 40px;
+                margin: 0;
+            }
+    
+            h1 {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+    
+            .container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                flex-wrap: wrap;
+            }
+    
+            #videoFrame {
+                width: 640px;
+                height: auto;
+                border-radius: 12px;
+                box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+            }
+    
+            .controls {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+    
+            .controls button {
+                font-size: 18px;
+                margin: 10px;
+                padding: 12px 24px;
+                border-radius: 10px;
+                border: none;
+                background-color: #1f1f1f;
+                color: white;
+                cursor: pointer;
+                width: 160px;
+                transition: background 0.3s;
+            }
+    
+            .controls button:hover {
+                background-color: #333;
+            }
+        </style>
+    </head>
+    <body>
+    
+        <h1>🤖 Robot Controller + 📷 Live Feed</h1>
+    
+        <div class="container">
+            <img id="videoFrame" src="" alt="Live Video Stream" />
+    
+            <div class="controls">
+                <button onclick="sendCommand('w')">↑ Forward (W)</button>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="sendCommand('a')">← Left (A)</button>
+                    <button onclick="sendCommand('s')">↓ Backward (S)</button>
+                    <button onclick="sendCommand('d')">→ Right (D)</button>
+                </div>
+                <button onclick="sendCommand('b')">⛔ Brake (B)</button>
+                <button onclick="sendCommand('q')">❌ Quit (Q)</button>
+            </div>
+        </div>    
+
+    <script>
+        // WebSocket for Camera Stream
+        const cameraSocket = new WebSocket("ws://100.113.195.60:8761");
+        const video = document.getElementById("videoFrame");
+
+        cameraSocket.onmessage = (event) => {
+            video.src = "data:image/jpeg;base64," + event.data;
+        };
+
+        cameraSocket.onerror = (error) => {
+            console.error("Camera WebSocket error:", error);
+        };
+
+        // WebSocket for Command Control
+        const commandSocket = new WebSocket("ws://100.113.195.60:8765");
+
+        commandSocket.onopen = () => {
+            console.log("✅ Connected to Command Server");
+        };
+
+        commandSocket.onerror = (error) => {
+            console.error("Command WebSocket error:", error);
+        };
+
+        function sendCommand(cmd) {
+            if (commandSocket.readyState === WebSocket.OPEN) {
+                commandSocket.send(cmd);
+                console.log(`📤 Sent command: ${cmd}`);
+            } else {
+                console.warn("⚠️ Command socket not connected");
+            }
+        }
+
+        // Optional: Support keyboard input
+        document.addEventListener("keydown", (e) => {
+            const validKeys = ['w', 'a', 's', 'd', 'b', 'q'];
+            if (validKeys.includes(e.key)) {
+                sendCommand(e.key);
+            }
+        });
+    </script>
+
+</body>
+</html>
