@@ -66,7 +66,7 @@
                 <button onclick="sendCommand('w')">↑</button>
                 <div style="display: flex; gap: 6px;">
                     <button onclick="sendCommand('a')">←</button>
-                    <button onclick="sendCommand('b')">Stop</button>
+                    <button onclick="sendCommand('s')">Stop</button>
                     <button onclick="sendCommand('d')">→</button>
                 </div>
                 <button onclick="sendCommand('b')">↓</button>
@@ -75,7 +75,7 @@
 
     <script>
         // WebSocket for Camera Stream
-        const cameraSocket = new WebSocket("ws://100.113.195.60:8761");
+        const cameraSocket = new WebSocket("https://raspberrypi3b.tail966e7e.ts.net/camera");
         const video = document.getElementById("videoFrame");
 
         cameraSocket.onmessage = (event) => {
@@ -87,7 +87,7 @@
         };
 
         // WebSocket for Command Control
-        const commandSocket = new WebSocket("ws://100.113.195.60:8765");
+        const commandSocket = new WebSocket("https://raspberrypi3b.tail966e7e.ts.net/control");
 
         commandSocket.onopen = () => {
             console.log("✅ Connected to Command Server");
