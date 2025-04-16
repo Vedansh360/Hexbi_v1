@@ -6,7 +6,7 @@ import redis
 import base64
 
 async def receive_frames():
-    uri = "https://raspberrypi3b.tail966e7e.ts.net/camera"
+    uri = "ws://100.113.195.60:8761"
     r = redis.Redis(host='localhost', port=6379, db=0)
 
     try:
@@ -21,7 +21,7 @@ async def receive_frames():
                     # Publish to Redis
                     _, buffer = cv2.imencode('.jpg', frame)
                     encoded = base64.b64encode(buffer).decode('utf-8')
-                    r.publish('camera_frame', encoded)
+                    r.publish('camera_frame', encoded.encode('utf-8'))
 
                     # (Optional: display it too)
                     cv2.imshow("Camera Feed", frame)
