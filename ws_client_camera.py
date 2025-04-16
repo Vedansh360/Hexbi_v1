@@ -6,7 +6,7 @@ import redis
 import base64
 
 async def receive_frames():
-    uri = "ws://100.113.195.60:8761"
+    uri = "ws://https://raspberrypi3b.tail966e7e.ts.net/camera"
     redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
     try:
