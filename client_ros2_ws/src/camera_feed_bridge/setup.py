@@ -8,7 +8,7 @@ setup(
     packages=[package_name],
     data_files=[
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', ['launch/redis_image_publisher.launch.py']),
+        ('share/' + package_name + '/launch', ['launch/camera_feed_bridge.launch.py']),
         ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
         ('share/' + package_name, ['resource/' + package_name]),
     ],

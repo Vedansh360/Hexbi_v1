@@ -8,9 +8,9 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 import threading
 
-class RedisImagePublisher(Node):
+class CameraFeedBridge(Node):
     def __init__(self):
-        super().__init__('redis_image_publisher')
+        super().__init__('camera_feed_bridge')
         self.publisher_ = self.create_publisher(Image, 'image_raw', 10)
         self.bridge = CvBridge()
         self.redis_client = redis.Redis(host='localhost', port=6379, db=0)
@@ -36,7 +36,7 @@ class RedisImagePublisher(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = RedisImagePublisher()
+    node = CameraFeedBridge()
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
