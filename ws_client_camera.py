@@ -18,15 +18,18 @@ async def receive_frames():
                 frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
 
                 if frame is not None:
-                    # Publish to Redis
                     _, buffer = cv2.imencode('.jpg', frame)
                     encoded = base64.b64encode(buffer).decode('utf-8')
-                    r.publish(str('camera_frame'), encoded.encode('utf-8'))
 
-                    # (Optional: display it too)
+                    channel = 'camera_frame'
+                    message = encoded.encode('utf-8')
+
+                    r.publish(channel, message)
+
                     cv2.imshow("Camera Feed", frame)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         break
+
     except Exception as e:
         print(f"Connection error: {e}")
     finally:
