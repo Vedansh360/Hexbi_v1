@@ -21,7 +21,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'redis_image_publisher = camera_feed_bridge.camera_feed_bridge:main',
+            'camera_feed_bridge = camera_feed_bridge.camera_feed_bridge:main',
         ],
     },
 )

@@ -5,8 +5,8 @@ def generate_launch_description():
     return LaunchDescription([
         Node(
             package='camera_feed_bridge',
-            executable='redis_image_publisher',
-            name='redis_image_publisher',
+            executable='camera_feed_bridge',
+            name='camera_feed_publisher',
             output='screen'
         )
     ])
