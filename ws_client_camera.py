@@ -7,7 +7,7 @@ import base64
 
 async def receive_frames():
     uri = "ws://100.113.195.60:8761"
-    r = redis.Redis(host='localhost', port=6379, db=0)
+    redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
     try:
         async with websockets.connect(uri) as websocket:
@@ -24,7 +24,7 @@ async def receive_frames():
                     channel = 'camera_frame'
                     message = encoded.encode('utf-8')
 
-                    r.publish(channel, message)
+                    redis_client.set(channel, message)
 
                     cv2.imshow("Camera Feed", frame)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
