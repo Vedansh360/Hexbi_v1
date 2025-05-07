@@ -2,9 +2,14 @@ import asyncio
 import websockets
 import numpy as np
 import cv2
-import base64  # <-- Add this
+import base64
+import json
+from datetime import datetime
 
+# Initialize camera with desired resolution
 cap = cv2.VideoCapture(0)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
 async def send_frames(websocket):
     try:
@@ -13,13 +18,21 @@ async def send_frames(websocket):
             if ret:
                 # Encode frame as JPEG
                 _, buffer = cv2.imencode('.jpg', frame)
-                # Encode as base64 string
                 frame_b64 = base64.b64encode(buffer.tobytes()).decode('utf-8')
 
-                # Send base64 string
-                await websocket.send(frame_b64)
+                # Get current timestamp
+                timestamp = datetime.now().timestamp()
 
-            await asyncio.sleep(0.01)  # Small delay to avoid overload
+                # Create message dictionary
+                message = {
+                    "timestamp": timestamp,
+                    "frame": frame_b64
+                }
+
+                # Send as JSON
+                await websocket.send(json.dumps(message))
+
+            await asyncio.sleep(1/10)  # Small delay
     except Exception as e:
         print(f"Connection error: {e}")
 

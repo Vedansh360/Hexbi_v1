@@ -2,7 +2,7 @@ import asyncio
 import websockets
 
 async def send_command():
-    uri = "ws://192.168.137.120:8765"  # Replace with your ROS 2 WebSocket server IP
+    uri = "ws://100.113.195.60:8765"  # Replace with your ROS 2 WebSocket server IP
     
     while True:
         try:

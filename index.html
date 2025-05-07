@@ -72,31 +72,38 @@
                 <button onclick="sendCommand('b')">↓</button>
             </div>
         </div>    
+    </body>
 
     <script>
         // WebSocket for Camera Stream
-        const cameraSocket = new WebSocket("https://raspberrypi3b.tail966e7e.ts.net/camera");
+        const cameraSocket = new WebSocket("wss://raspberrypi3b.tail966e7e.ts.net/camera");  // Use 'wss' if served over HTTPS
         const video = document.getElementById("videoFrame");
-
+    
         cameraSocket.onmessage = (event) => {
-            video.src = "data:image/jpeg;base64," + event.data;
+            try {
+                const message = JSON.parse(event.data); // Parse JSON
+                const base64Frame = message.frame;      // Extract base64-encoded JPEG
+                video.src = "data:image/jpeg;base64," + base64Frame;
+            } catch (err) {
+                console.error("Failed to parse camera frame:", err);
+            }
         };
-
+    
         cameraSocket.onerror = (error) => {
             console.error("Camera WebSocket error:", error);
         };
-
+    
         // WebSocket for Command Control
-        const commandSocket = new WebSocket("https://raspberrypi3b.tail966e7e.ts.net/control");
-
+        const commandSocket = new WebSocket("wss://raspberrypi3b.tail966e7e.ts.net/control");
+    
         commandSocket.onopen = () => {
             console.log("✅ Connected to Command Server");
         };
-
+    
         commandSocket.onerror = (error) => {
             console.error("Command WebSocket error:", error);
         };
-
+    
         function sendCommand(cmd) {
             if (commandSocket.readyState === WebSocket.OPEN) {
                 commandSocket.send(cmd);
@@ -105,7 +112,7 @@
                 console.warn("⚠️ Command socket not connected");
             }
         }
-
+    
         // Optional: Support keyboard input
         document.addEventListener("keydown", (e) => {
             const validKeys = ['w', 'a', 's', 'd', 'b', 'q'];
@@ -113,7 +120,5 @@
                 sendCommand(e.key);
             }
         });
-    </script>
-
-</body>
+    </script>        
 </html>

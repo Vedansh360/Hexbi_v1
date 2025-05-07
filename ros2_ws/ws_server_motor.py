@@ -20,12 +20,11 @@ async def websocket_handler(websocket):
         print(f"Connection error: {e}")
     except KeyboardInterrupt:
         print("Shutting Down Motor Control Server.")
-        exit
 
 async def start_server():
     """Starts the WebSocket server."""
     server = await websockets.serve(websocket_handler, "0.0.0.0", 8765, ping_interval=None)
-    print("Motor control webSocket server started on ws://0.0.0.0:8765")
+    print("WebSocket server started on ws://0.0.0.0:8765")
     await server.wait_closed()
 
 if __name__ == "__main__":

@@ -1,0 +1,45 @@
+fury@DESKTOP-S62C47E:~$ rosmsg info sensor_msgs/Imu
+std_msgs/Header header
+  uint32 seq
+  time stamp
+  string frame_id
+geometry_msgs/Quaternion orientation
+  float64 x
+  float64 y
+  float64 z
+  float64 w
+float64[9] orientation_covariance
+geometry_msgs/Vector3 angular_velocity
+  float64 x
+  float64 y
+  float64 z
+float64[9] angular_velocity_covariance
+geometry_msgs/Vector3 linear_acceleration
+  float64 x
+  float64 y
+  float64 z
+float64[9] linear_acceleration_covariance
+
+fury@DESKTOP-S62C47E:~$ rosmsg info sensor_msgs/Image
+std_msgs/Header header
+  uint32 seq
+  time stamp
+  string frame_id
+uint32 height
+uint32 width
+string encoding
+uint8 is_bigendian
+uint32 step
+uint8[] data
+
+roscore
+roslaunch orb_slam3_ros_wrapper euroc_monoimu.launch
+rosrun camera_info_publisher camera_info_publisher.py
+rosrun redis_image_publisher redis_image_publisher.py
+
+source devel/setup.bash
+catkin_make -j3
+catkin_create_pkg <name> <depend> <depend>
+
+cd E:/Codes/Hexbi_v1 ; python ws_client_camera.py
+cd E:/Codes/Hexbi_v1 ; python ws_client_motor.py
